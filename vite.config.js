@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api/v1": {
-        target: "http://localhost:5000", // Correct backend URL
+        target: ["http://localhost:5000","https://be-auctionbidding-1.onrender.com"], // Correct backend URL
         changeOrigin: true, // Ensure the origin is changed to the target URL
         secure: false, // Allow self-signed certificates (if applicable)
         rewrite: (path) => path.replace(/^\/api\/v1/, ""), // Remove /api/v1 prefix

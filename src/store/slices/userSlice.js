@@ -106,7 +106,7 @@ export const login = (data) => async (dispatch) => {
   dispatch(userSlice.actions.loginRequest());
   try {
     const response = await axios.post(
-      "fe-auctionbidding.netlify.app/api/v1/user/login",
+      "https://be-auctionbidding-1.onrender.com/api/v1/user/login",
       data,
       {
         withCredentials: true,
