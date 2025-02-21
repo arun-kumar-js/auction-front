@@ -85,7 +85,7 @@ export const register = (data) => async (dispatch) => {
   dispatch(userSlice.actions.registerRequest());
   try {
     const response = await axios.post(
-      "https://be-auctionbidding-1.onrender.com/api/v1/user/register",
+      "http://localhost:3000/api/v1/user/register",
       data,
       {
         withCredentials: true,
@@ -106,7 +106,7 @@ export const login = (data) => async (dispatch) => {
   dispatch(userSlice.actions.loginRequest());
   try {
     const response = await axios.post(
-      "https://be-auctionbidding-1.onrender.com/api/v1/user/login",
+      "http://localhost:3000/api/v1/user/login",
       data,
       {
         withCredentials: true,
@@ -126,12 +126,17 @@ export const login = (data) => async (dispatch) => {
 export const logout = () => async (dispatch) => {
   try {
     const response = await axios.get(
-      "https://be-auctionbidding-1.onrender.com/api/v1/user/logout",
+      "http://localhost:3000/api/v1/user/logout",
       { withCredentials: true }
     );
+
     dispatch(userSlice.actions.logoutSuccess());
     toast.success(response.data.message);
     dispatch(userSlice.actions.clearAllErrors());
+
+    // Clear all stored data
+    clearLocalStorage();
+    clearAllCookies();
   } catch (error) {
     dispatch(userSlice.actions.logoutFailed());
     toast.error(error.response?.data?.message || "Logout failed");
@@ -139,12 +144,26 @@ export const logout = () => async (dispatch) => {
   }
 };
 
+// Function to clear local storage
+const clearLocalStorage = () => {
+  localStorage.clear();
+};
+
+// Function to clear cookies (if needed)
+const clearAllCookies = () => {
+  document.cookie.split(";").forEach((c) => {
+    document.cookie = c
+      .replace(/^ +/, "")
+      .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
+  });
+};
+
 
 export const fetchUser = () => async (dispatch) => {
   dispatch(userSlice.actions.fetchUserRequest());
   try {
     const response = await axios.get(
-      "https://be-auctionbidding-1.onrender.com/api/v1/user/me",
+      "http://localhost:3000/api/v1/user/me",
       { withCredentials: true }
     );
     dispatch(userSlice.actions.fetchUserSuccess(response.data.user));
@@ -160,7 +179,7 @@ export const fetchLeaderboard = () => async (dispatch) => {
   dispatch(userSlice.actions.fetchLeaderboardRequest());
   try {
     const response = await axios.get(
-      "https://be-auctionbidding-1.onrender.com/api/v1/user/leaderboard",
+      "http://localhost:3000/api/v1/user/leaderboard",
       { withCredentials: true }
     );
     dispatch(

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { RiAuctionFill } from "react-icons/ri";
 import { MdLeaderboard, MdDashboard } from "react-icons/md";
 import { SiGooglesearchconsole } from "react-icons/si";
-
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdCloseCircleOutline, IoIosCreate } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
@@ -14,13 +13,18 @@ import { Link } from "react-router-dom";
 
 const SideDrawer = () => {
   const [show, setShow] = useState(false);
-
   const { isAuthenticated, user } = useSelector((state) => state.user);
-
   const dispatch = useDispatch();
+
   const handleLogout = () => {
     dispatch(logout());
   };
+
+  // Debugging: Log state values
+  useEffect(() => {
+    console.log("isAuthenticated:", isAuthenticated);
+    console.log("user:", user);
+  }, [isAuthenticated, user]);
 
   return (
     <>
@@ -97,32 +101,31 @@ const SideDrawer = () => {
               </li>
             )}
           </ul>
+
+          {/* Authentication Buttons */}
           {!isAuthenticated ? (
-            <>
-              <div className="flex gap-2 my-4">
-                <Link
-                  to={"/sign-up"}
-                  className="bg-[#D6482B] hover:bg-[#b8381e] px-4 py-1 rounded-md font-semibold text-white text-xl"
-                >
-                  Sign Up
-                </Link>
-                <Link
-                  to={"/login"}
-                  className="border-[#DECCBE] border-2 bg-transparent hover:bg-[#fffefd] px-4 py-1 rounded-md font-bold text-[#DECCBE] text-xl hover:text-[#fdba88]"
-                >
-                  Login
-                </Link>
-              </div>
-            </>
+            <div className="flex gap-2 my-4">
+              <Link
+                to={"/sign-up"}
+                className="bg-[#D6482B] hover:bg-[#b8381e] px-4 py-1 rounded-md font-semibold text-white text-xl"
+              >
+                Sign Up
+              </Link>
+              <Link
+                to={"/login"}
+                className="border-[#DECCBE] border-2 bg-transparent hover:bg-[#fffefd] px-4 py-1 rounded-md font-bold text-[#DECCBE] text-xl hover:text-[#fdba88]"
+              >
+                Login
+              </Link>
+            </div>
           ) : (
-            <>
-              <div className="flex gap-4 my-4 w-fit" onClick={handleLogout}>
-                <button className="bg-[#D6482B] hover:bg-[#b8381e] px-4 py-1 rounded-md font-semibold text-white text-xl">
-                  Logout
-                </button>
-              </div>
-            </>
+            <div className="flex gap-4 my-4 w-fit" onClick={handleLogout}>
+              <button className="bg-[#D6482B] hover:bg-[#b8381e] px-4 py-1 rounded-md font-semibold text-white text-xl">
+                Logout
+              </button>
+            </div>
           )}
+
           <hr className="mb-4 border-t-[#d6482b]" />
           <ul className="flex flex-col gap-3">
             {isAuthenticated && (
@@ -143,15 +146,12 @@ const SideDrawer = () => {
                 <SiGooglesearchconsole /> How it works
               </Link>
             </li>
-            
           </ul>
           <IoMdCloseCircleOutline
             onClick={() => setShow(!show)}
             className="top-0 right-4 absolute sm:hidden text-[28px]"
           />
         </div>
-
-      
       </div>
     </>
   );
